@@ -1,14 +1,24 @@
+//import User from 'models/User.js'
 const http = require('http');
+var user = require("./models/User.js");
+var userDAO = require("./repositories/UserDAO.js");
 
+const app = require('./config/server');
 const hostname = '127.0.0.1';
 const port = 3000;
+const path = require('path');
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
+const express = require('express')
+const server = express();
+const router = express.Router();
+
+router.get("/", function(req, res) {
+  res.sendFile(__dirname + "/views/index.html");
 });
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+router.get("/user/create", function(req, res) {
+  res.sendFile(__dirname + "/views/user/create.html");
 });
+
+server.use('/', router);
+server.listen(process.env.port || 3000);
