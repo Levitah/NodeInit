@@ -43,6 +43,11 @@ class User {
     return await userModel.find({});
   }
 
+  static async getLast() {
+    var users = await this.getAll();
+    return users[users.length - 1];
+  }
+
   // verificando se o produto já existe
   static async verifyProduct(data) {
     return await userModel.findOne(data);

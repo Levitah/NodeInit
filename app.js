@@ -1,6 +1,5 @@
 //import User from 'models/User.js'
 const http = require('http');
-var user = require("./models/User.js");
 var userDAO = require("./repositories/UserDAO.js");
 
 const config = require('./config/server');
@@ -9,6 +8,7 @@ const port = 3000;
 const path = require('path');
 
 const fs = require('fs');
+const ejs = require('ejs');
 
 const express = require('express')
 const app = express();
@@ -19,9 +19,24 @@ const storage = multer.memoryStorage()
 const upload = multer({ storage: storage });
 
 app.use(express.urlencoded({ extended: true }));
+app.set("view engine", "ejs");
 
 router.get("/", function(req, res) {
   res.sendFile(__dirname + "/views/index.html");
+});
+
+app.get("/user/detail", function(req, res) {
+  userDAO.getLast().then((user) => {
+    var renderData = {};
+    renderData.userName = user.name;
+    renderData.userEmail = user.email;
+    renderData.userPhoto = user.photo;
+
+    res.render("user/detail", renderData);
+  }).catch((err) => {
+    console.log("error", err);
+  });
+  //res.sendFile(__dirname + "/views/user/detail.html");
 });
 
 router.get("/user/create", function(req, res) {
