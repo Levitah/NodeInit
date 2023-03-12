@@ -21,8 +21,6 @@ class User {
     obj.photo = data.photo;
     obj.active = data.active;
     return await userModel(obj).save();
-    //await userModel.insertMany(tags);
-    //return await userModel.save();
   }
 
   static encryptPassword(text) {
