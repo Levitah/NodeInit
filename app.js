@@ -12,12 +12,27 @@ const express = require('express')
 const server = express();
 const router = express.Router();
 
+server.use(express.urlencoded({extended: true})); 
+
 router.get("/", function(req, res) {
   res.sendFile(__dirname + "/views/index.html");
 });
 
 router.get("/user/create", function(req, res) {
   res.sendFile(__dirname + "/views/user/create.html");
+});
+
+router.post("/user/create", function(req, res) {
+
+  newUser = {};
+  newUser.name = req.body.name;
+  newUser.birthDate = req.body.birthDate;
+  newUser.email = req.body.email;
+  newUser.password = req.body.password;
+  newUser.photo = req.body.photo;
+  newUser.active = req.body.active;
+
+  userDAO.create(newUser);
 });
 
 server.use('/', router);

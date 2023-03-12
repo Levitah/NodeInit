@@ -4,6 +4,9 @@ require('../models/User.js');
 const mongoose = require('mongoose');
 const userModel = mongoose.model('User');
 
+const bcrypt = require("bcrypt")
+const saltRounds = 10
+
 class User {
   // adicionando produto
   static async create(data) {
@@ -12,12 +15,19 @@ class User {
     obj.name = data.name;
     obj.birthDate = data.birthDate;
     obj.email = data.email;
-    obj.password = data.password;
+
+    obj.password = this.encryptPassword(data.password);
+
     obj.photo = data.photo;
     obj.active = data.active;
     return await userModel(obj).save();
     //await userModel.insertMany(tags);
     //return await userModel.save();
+  }
+
+  static encryptPassword(text) {
+    var salt = bcrypt.genSaltSync(saltRounds);
+    return bcrypt.hashSync(text, salt);
   }
 
   // atualizando produto
